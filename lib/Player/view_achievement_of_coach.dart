@@ -1,48 +1,102 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'edit_profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:selectiontrialsnew/Player/player_home.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
-  runApp(const ViewProfile());
+  runApp(const ViewAchievementCoach());
 }
 
-class ViewProfile extends StatelessWidget {
-  const ViewProfile({super.key});
+class ViewAchievementCoach extends StatelessWidget {
+  const ViewAchievementCoach({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'View Profile',
+      title: 'View Reply',
       theme: ThemeData(
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 18, 82, 98)),
         useMaterial3: true,
       ),
-      home: const ViewAchievementOfCoach(title: 'View Profile'),
+      home: const ViewAchievementCoachPage(title: 'View Reply'),
     );
   }
 }
 
-class ViewAchievementOfCoach extends StatefulWidget {
-  const ViewAchievementOfCoach({super.key, required this.title});
+class ViewAchievementCoachPage extends StatefulWidget {
+  const ViewAchievementCoachPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<ViewAchievementOfCoach> createState() => _ViewAchievementOfCoachState();
+  State<ViewAchievementCoachPage> createState() => _ViewAchievementCoachPageState();
 }
 
-class _ViewAchievementOfCoachState extends State<ViewAchievementOfCoach> {
+class _ViewAchievementCoachPageState extends State<ViewAchievementCoachPage> {
 
-  _ViewAchievementOfCoachState()
-  {
-    _send_data();
+  _ViewAchievementCoachPageState(){
+    ViewAchievementCoach();
   }
+
+  List<String> id_ = <String>[];
+  List<String> coach_name_= <String>[];
+  List<String> achievement_= <String>[];
+  List<String> event_= <String>[];
+
+
+  Future<void> ViewAchievementCoach() async {
+    List<String> id = <String>[];
+    List<String> coach_name = <String>[];
+    List<String> achievement = <String>[];
+    List<String> event = <String>[];
+
+
+
+    try {
+      SharedPreferences sh = await SharedPreferences.getInstance();
+      String urls = sh.getString('url').toString();
+      String url = '$urls/ply_view_achievement_of_coach/';
+
+      var data = await http.post(Uri.parse(url), body: {
+
+
+      });
+      var jsondata = json.decode(data.body);
+      String statuss = jsondata['status'];
+
+      var arr = jsondata["data"];
+
+      print(arr.length);
+
+      for (int i = 0; i < arr.length; i++) {
+        id.add(arr[i]['id'].toString());
+        coach_name.add(arr[i]['coach_name'].toString());
+        achievement.add(arr[i]['achievement'].toString());
+        event.add(arr[i]['event'].toString());
+
+      }
+
+      setState(() {
+        id_ = id;
+        coach_name_ = coach_name;
+        achievement_ = achievement;
+        event_ = event;
+
+      });
+
+      print(statuss);
+    } catch (e) {
+      print("Error ------------------- " + e.toString());
+      //there is error during converting file image to base64 encoding.
+    }
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -52,144 +106,94 @@ class _ViewAchievementOfCoachState extends State<ViewAchievementOfCoach> {
       onWillPop: () async{ return true; },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton( ),
+          leading: BackButton( onPressed:() {
+
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => HomeNewPage(title: 'Home',)),);
+
+          },),
           backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(widget.title),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+        body: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          // padding: EdgeInsets.all(5.0),
+          // shrinkWrap: true,
+          itemCount: id_.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              onLongPress: () {
+                print("long press" + index.toString());
+              },
+              title: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Card(
+                        child:
+                        Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Coach Name"),
+                                  Text(coach_name_[index]),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Achievement"),
+
+                                  Text(achievement_[index]),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Event Name"),
+
+                                  Text(event_[index]),
+                                ],
+                              ),
+                            ),
 
 
-              CircleAvatar(radius: 50,),
-              Column(
-                children: [
-                  Image(image: NetworkImage(photo_),height: 200,width: 200,),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(name_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(dob_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(gender_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(email_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(phone_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(place_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(post_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(pin_),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(district_),
-                  ),
 
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => MyEditPage(title: "Edit Profile"),));
-                },
-                child: Text("Edit Profile"),
-              ),
+                          ],
+                        )
 
-            ],
-          ),
+
+                        ,
+                        elevation: 8,
+                        margin: EdgeInsets.all(10),
+                      ),
+                    ],
+                  )),
+            );
+          },
         ),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => MySendtip_description()));
+
+        },
+          child: Icon(Icons.plus_one),
+        ),
+
+
       ),
     );
-  }
-
-
-  String name_="";
-  String dob_="";
-  String gender_="";
-  String email_="";
-  String phone_="";
-  String place_="";
-  String post_="";
-  String pin_="";
-  String district_="";
-  String photo_="";
-
-  void _send_data() async{
-
-
-
-    SharedPreferences sh = await SharedPreferences.getInstance();
-    String url = sh.getString('url').toString();
-    String lid = sh.getString('lid').toString();
-
-    final urls = Uri.parse('$url/myapp/user_viewprofile/');
-    try {
-      final response = await http.post(urls, body: {
-        'lid':lid
-
-
-
-      });
-      if (response.statusCode == 200) {
-        String status = jsonDecode(response.body)['status'];
-        if (status=='ok') {
-          String name=jsonDecode(response.body)['name'];
-          String dob=jsonDecode(response.body)['dob'];
-          String gender=jsonDecode(response.body)['gender'];
-          String email=jsonDecode(response.body)['email'];
-          String phone=jsonDecode(response.body)['phone'];
-          String place=jsonDecode(response.body)['place'];
-          String post=jsonDecode(response.body)['post'];
-          String pin=jsonDecode(response.body)['pin'];
-          String district=jsonDecode(response.body)['district'];
-          String photo=url+jsonDecode(response.body)['photo'];
-
-          setState(() {
-
-            name_= name;
-            dob_= dob;
-            gender_= gender;
-            email_= email;
-            phone_= phone;
-            place_= place;
-            post_= post;
-            pin_= pin;
-            district_= district;
-            photo_= photo;
-          });
-
-
-
-
-
-        }else {
-          Fluttertoast.showToast(msg: 'Not Found');
-        }
-      }
-      else {
-        Fluttertoast.showToast(msg: 'Network Error');
-      }
-    }
-    catch (e){
-      Fluttertoast.showToast(msg: e.toString());
-    }
   }
 }

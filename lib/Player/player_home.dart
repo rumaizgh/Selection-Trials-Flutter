@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Player/change_password.dart';
 import 'package:selectiontrialsnew/Player/send_review_about_academy.dart';
 import 'package:selectiontrialsnew/Player/view_academy_chat.dart';
+import 'package:selectiontrialsnew/Player/view_achievement_of_coach.dart';
 import 'package:selectiontrialsnew/Player/view_applied_trials.dart';
 import 'package:selectiontrialsnew/Player/view_certificate_of_coach.dart';
 import 'package:selectiontrialsnew/Player/view_coach_and_follow.dart';
@@ -367,6 +368,13 @@ class _PlayerHomeState extends State<PlayerHome> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SendReviewAcademyPage(title: '',),));
+                },
+              ), ListTile(
+                leading: Icon(Icons.home),
+                title: const Text('View Achievement of Coach'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAchievementCoach(),));
                 },
               ),
 
