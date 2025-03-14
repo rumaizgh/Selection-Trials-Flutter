@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:selectiontrialsnew/Coach/add_experience.dart';
 import 'package:selectiontrialsnew/Coach/add_tips.dart';
+import 'package:selectiontrialsnew/Coach/change_password.dart';
 import 'package:selectiontrialsnew/Coach/send_complaint.dart';
 import 'package:selectiontrialsnew/Coach/view_certificate.dart';
 import 'package:selectiontrialsnew/Coach/view_experience.dart';
@@ -68,6 +69,16 @@ class _CoachHomePage extends State<CoachHomePage> {
                   fontSize: 24,
                 ),
               ),
+            ),
+            ListTile(
+              title: const Text("Change Password"),
+              onTap: () {
+                Navigator.pop(context);
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ChangePasswordCoach(title: "Change Password",)
+                ));
+              },
             ),
             ListTile(
               title: const Text("View Profile"),

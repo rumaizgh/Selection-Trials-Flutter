@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:selectiontrialsnew/Player/player_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -17,22 +23,22 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Mychangepasspage(title: 'Flutter Demo Home Page'),
+      home: const ChangePasswordCoach(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class Mychangepasspage extends StatefulWidget {
-  const Mychangepasspage({super.key, required this.title});
+class ChangePasswordCoach extends StatefulWidget {
+  const ChangePasswordCoach({super.key, required this.title});
 
 
   final String title;
 
   @override
-  State<Mychangepasspage> createState() => _MychangepasspageState();
+  State<ChangePasswordCoach> createState() => _ChangePasswordCoachState();
 }
 
-class _MychangepasspageState extends State<Mychangepasspage> {
+class _ChangePasswordCoachState extends State<ChangePasswordCoach> {
 
   TextEditingController CurrentPasscontroller=TextEditingController();
   TextEditingController NewPasscontroller=TextEditingController();
@@ -57,13 +63,15 @@ class _MychangepasspageState extends State<Mychangepasspage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
-            TextFormField(controller: CurrentPasscontroller, decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Current Password')),),
+            TextFormField(controller: CurrentPasscontroller,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Current Password')),),
             SizedBox(height: 20),
             TextFormField(controller: NewPasscontroller,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('New Password')),),
             SizedBox(height: 20,),
             TextFormField(controller: ConfirmPasscontroller,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Confirm Password')),),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: (){}, child: Text('Submit'))
+            ElevatedButton(onPressed: (){
+              _send_data1();
+            }, child: Text('Submit'))
           ],
         ),
       ),
@@ -71,6 +79,48 @@ class _MychangepasspageState extends State<Mychangepasspage> {
     );
   }
 
+
+  void _send_data1() async{
+
+
+    String current_pass=CurrentPasscontroller.text;
+    String new_pass=NewPasscontroller.text;
+    String confirm_pass=ConfirmPasscontroller.text;
+
+
+
+    SharedPreferences sh = await SharedPreferences.getInstance();
+    String url = sh.getString('url').toString();
+    String lid = sh.getString('lid').toString();
+
+    final urls = Uri.parse('$url/coc_change_password/');
+    try {
+      final response = await http.post(urls, body: {
+        'current_pass':current_pass,
+        'new_pass':new_pass,
+        'confirm_pass':confirm_pass,
+        'lid':lid,
+
+      });
+      if (response.statusCode == 200) {
+        String status = jsonDecode(response.body)['status'];
+        if (status=='ok') {
+          Fluttertoast.showToast(msg: 'Sign up successfull');
+          Navigator.push(context , MaterialPageRoute(
+
+            builder: (context) => PlayerHome(title: "Submit"),));
+        }else {
+          Fluttertoast.showToast(msg: 'Email Already exists');
+        }
+      }
+      else {
+        Fluttertoast.showToast(msg: 'Network Error');
+      }
+    }
+    catch (e){
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
 
 
 
