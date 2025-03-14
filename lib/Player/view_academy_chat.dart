@@ -82,7 +82,7 @@ class _ViewAcademyChatPageState extends State<ViewAcademyChatPage> {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
       String lid = sh.getString('lid').toString();
-      String url = '$urls/ply_view_chat_academy/';
+      String url = '$urls/ply_view_chat_acd/';
 
       var data = await http.post(Uri.parse(url), body: {
 

@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Player/change_password.dart';
+import 'package:selectiontrialsnew/Player/send_review_about_academy.dart';
 import 'package:selectiontrialsnew/Player/view_academy_chat.dart';
 import 'package:selectiontrialsnew/Player/view_applied_trials.dart';
 import 'package:selectiontrialsnew/Player/view_certificate_of_coach.dart';
@@ -359,6 +360,13 @@ class _PlayerHomeState extends State<PlayerHome> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ViewExperienceCoach(),));
+                },
+              ), ListTile(
+                leading: Icon(Icons.home),
+                title: const Text('Send Review About Academy'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SendReviewAcademyPage(title: '',),));
                 },
               ),
 
