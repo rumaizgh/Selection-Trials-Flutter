@@ -2,10 +2,12 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:selectiontrialsnew/Coach/add_achievement.dart';
 import 'package:selectiontrialsnew/Coach/add_experience.dart';
 import 'package:selectiontrialsnew/Coach/add_tips.dart';
 import 'package:selectiontrialsnew/Coach/change_password.dart';
 import 'package:selectiontrialsnew/Coach/send_complaint.dart';
+import 'package:selectiontrialsnew/Coach/view_achievement.dart';
 import 'package:selectiontrialsnew/Coach/view_certificate.dart';
 import 'package:selectiontrialsnew/Coach/view_experience.dart';
 import 'package:selectiontrialsnew/Coach/view_players_chat.dart';
@@ -195,6 +197,26 @@ class _CoachHomePage extends State<CoachHomePage> {
 
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => AddExperiencePage(title: "Add Experience",)
+                ));// ose the drawer
+              },
+            ),ListTile(
+              title: const Text('Add Achievement'),
+              onTap: () {
+                // Update the UI or navigate to another screen
+                Navigator.pop(context); // Cl
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => MyAddAchievementPage(title: "Add Achievement",)
+                ));// ose the drawer
+              },
+            ),ListTile(
+              title: const Text('View Achievement'),
+              onTap: () {
+                // Update the UI or navigate to another screen
+                Navigator.pop(context); // Cl
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => MyViewAchievementPage(title: "View Achievement",)
                 ));// ose the drawer
               },
             ),

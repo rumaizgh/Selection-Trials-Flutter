@@ -37,25 +37,27 @@ class MyViewAchievementPage extends StatefulWidget {
 }
 
 class _MyViewAchievementPageState extends State<MyViewAchievementPage> {
-  
+  int _counter = 0;
+
+  _MyViewAchievementPageState() {
+    view();
+  }
 
   List<String> id_ = <String>[];
   List<String> achievement_= <String>[];
   List<String> event_= <String>[];
-  List<String> coachid_= <String>[];
 
   Future<void> view() async {
     List<String> id = <String>[];
     List<String> achievement= <String>[];
     List<String> event= <String>[];
-    List<String> coachid= <String>[];
 
 
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
       String lid = sh.getString('lid').toString();
-      String url = '$urls/user_viewreply/';
+      String url = '$urls/coc_view_achievement/';
 
       var data = await http.post(Uri.parse(url), body: {
 
@@ -71,15 +73,14 @@ class _MyViewAchievementPageState extends State<MyViewAchievementPage> {
 
       for (int i = 0; i < arr.length; i++) {
         id.add(arr[i]['id'].toString());
-        achievement.add(arr[i]['date']);
-        event.add(arr[i]['complaint']);
+        achievement.add(arr[i]['achievement'].toString());
+        event.add(arr[i]['event'].toString());
       }
 
       setState(() {
         id_ = id;
         achievement_ = achievement;
         event_ = event;
-        coachid_ = coachid;
       });
 
       print(statuss);
@@ -122,27 +123,37 @@ class _MyViewAchievementPageState extends State<MyViewAchievementPage> {
                   children: [
                     Card(
                       child:
-                      Row(
-                          children: [
-                            Column(
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(achievement_[index]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(event_[index]),
-                                ),    Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(coachid_[index]),
-                                ),
+                                Text("Achievement"),
+                                Text(achievement_[index]),
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Event Name"),
 
-                          ]
-                      ),
+                                Text(event_[index]),
+                              ],
+                            ),
+                          ),
 
+
+
+                        ],
+                      )
+
+
+                      ,
                       elevation: 8,
                       margin: EdgeInsets.all(10),
                     ),

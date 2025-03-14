@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:selectiontrialsnew/Coach/coc_home.dart';
+import 'package:selectiontrialsnew/Player/player_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,7 +73,9 @@ class _MyAddAchievementPageState extends State<MyAddAchievementPage> {
 
 
 
-            ElevatedButton(onPressed: (){}, child: Text('Submit'))
+            ElevatedButton(onPressed: (){
+              _send_data();
+            }, child: Text('Submit'))
           ],
         ),
       ),
@@ -90,22 +94,26 @@ class _MyAddAchievementPageState extends State<MyAddAchievementPage> {
 
     SharedPreferences sh = await SharedPreferences.getInstance();
     String url = sh.getString('url').toString();
+    String lid = sh.getString('lid').toString();
 
-    final urls = Uri.parse('$url/ply_login/');
+    final urls = Uri.parse('$url/coc_add_achievement/');
     try {
       final response = await http.post(urls, body: {
         'achievement':achievement,
         'event':event,
+        'lid':lid,
 
 
       });
       if (response.statusCode == 200) {
         String status = jsonDecode(response.body)['status'];
         if (status=='ok') {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => MyAddAchievementPage(title: "Home"),));
+          Fluttertoast.showToast(msg: 'Added Successfully');
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CoachHomePage(title: 'Coach Home ',)));
         }else {
-          Fluttertoast.showToast(msg: 'Not Found');
+          Fluttertoast.showToast(msg: 'Incorrect Password');
         }
       }
       else {
