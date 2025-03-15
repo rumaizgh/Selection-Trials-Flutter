@@ -146,7 +146,7 @@ class _PlayerHomeState extends State<PlayerHome> {
     String email = sh.getString('email').toString();
     String photo = sh.getString('photo').toString();
 
-
+    
     setState(() {
       uname_=name;
       email_=email;

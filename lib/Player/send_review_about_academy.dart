@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:selectiontrialsnew/Coach/view_experience.dart';
 import 'package:selectiontrialsnew/Coach/view_reply.dart';
 import 'package:selectiontrialsnew/Coach/view_tips.dart';
+import 'package:selectiontrialsnew/Player/player_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -110,7 +111,7 @@ class _SendReviewAcademyPageState extends State<SendReviewAcademyPage> {
           Fluttertoast.showToast(msg: 'Added Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ViewReplyPage(title: 'View Reply ',)));
+              MaterialPageRoute(builder: (context) => PlayerHome(title: 'Player Home ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }

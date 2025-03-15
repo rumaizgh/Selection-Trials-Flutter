@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:selectiontrialsnew/Coach/view_experience.dart';
 import 'package:selectiontrialsnew/Coach/view_reply.dart';
 import 'package:selectiontrialsnew/Coach/view_tips.dart';
+import 'package:selectiontrialsnew/Player/player_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,22 +26,22 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SendReviewAcademyPage(title: 'Flutter Demo Home Page'),
+      home: const SendReviewCoachPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SendReviewAcademyPage extends StatefulWidget {
-  const SendReviewAcademyPage({super.key, required this.title});
+class SendReviewCoachPage extends StatefulWidget {
+  const SendReviewCoachPage({super.key, required this.title});
 
 
   final String title;
 
   @override
-  State<SendReviewAcademyPage> createState() => _SendReviewAcademyPageState();
+  State<SendReviewCoachPage> createState() => _SendReviewCoachPageState();
 }
 
-class _SendReviewAcademyPageState extends State<SendReviewAcademyPage> {
+class _SendReviewCoachPageState extends State<SendReviewCoachPage> {
 
   TextEditingController ReviewController=TextEditingController();
   TextEditingController DateController=TextEditingController();
@@ -94,7 +95,7 @@ class _SendReviewAcademyPageState extends State<SendReviewAcademyPage> {
     String url = sh.getString('url').toString();
     String lid = sh.getString('lid').toString();
 
-    final urls = Uri.parse('$url/ply_send_review_about_academy/');
+    final urls = Uri.parse('$url/ply_send_review_about_coach/');
     try {
       final response = await http.post(urls, body: {
         'review':Review,
@@ -110,7 +111,7 @@ class _SendReviewAcademyPageState extends State<SendReviewAcademyPage> {
           Fluttertoast.showToast(msg: 'Added Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ViewReplyPage(title: 'View Reply ',)));
+              MaterialPageRoute(builder: (context) => PlayerHome(title: 'Player Home ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }

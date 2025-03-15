@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Coach/chat_with_player.dart';
 import 'package:selectiontrialsnew/Coach/send_complaint.dart';
+import 'package:selectiontrialsnew/Player/send_review_about_coach.dart';
 import 'package:selectiontrialsnew/Player/view_coach_and_follow.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -222,18 +223,24 @@ class _ViewCoachChatPageState extends State<ViewCoachChatPage> {
                                   ),
 
                                   ElevatedButton(onPressed: () async {
-            SharedPreferences sh = await SharedPreferences.getInstance();
-            sh.setString('aid', LOGIN_id_[index]);
-            sh.setString('name', name_[index]);
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatWithPlayer(title: '')));
+                                            SharedPreferences sh = await SharedPreferences.getInstance();
+                                            sh.setString('aid', LOGIN_id_[index]);
+                                            sh.setString('name', name_[index]);
+                                            Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => ChatWithPlayer(title: '')));
 
+                                        }, child: Text("Chat")),
 
+                                  ElevatedButton(onPressed: () async {
+                                            SharedPreferences sh = await SharedPreferences.getInstance();
+                                            sh.setString('aid', LOGIN_id_[index]);
+                                            // sh.setString('name', name_[index]);
+                                            Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => SendReviewCoachPage(title: '')));
 
-
-
-            }, child: Text("Chat")),
+                                        }, child: Text("Review")),
 
 
 
