@@ -101,7 +101,7 @@ class _CoachHomePage extends State<CoachHomePage> {
                 Navigator.pop(context);
 
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ViewReviewPagePage(title: "View Review",)
+                    builder: (context) => ViewReviewPage(title: "View Review",)
                 ));
               },
             ),

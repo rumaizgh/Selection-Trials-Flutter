@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:http/http.dart' as http;
-import 'package:selectiontrialsnew/Coach/send_complaint.dart';
+import 'package:selectiontrialsnew/Player/player_home.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'coc_home.dart';
+
 
 void main() {
-  runApp(const ViewReviewPage(title: ''));
+  runApp(const ViewReview());
 }
 
-class ViewReviewPage extends StatelessWidget {
-  const ViewReviewPage({super.key, required title});
+class ViewReview extends StatelessWidget {
+  const ViewReview({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,49 +21,49 @@ class ViewReviewPage extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 18, 82, 98)),
         useMaterial3: true,
       ),
-      home: const ViewReviewPagePage(title: 'View Reply'),
+      home: const ViewReviewPage(title: 'View Reply'),
     );
   }
 }
 
-class ViewReviewPagePage extends StatefulWidget {
-  const ViewReviewPagePage({super.key, required this.title});
+class ViewReviewPage extends StatefulWidget {
+  const ViewReviewPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<ViewReviewPagePage> createState() => _ViewReviewPagePageState();
+  State<ViewReviewPage> createState() => _ViewReviewPageState();
 }
 
-class _ViewReviewPagePageState extends State<ViewReviewPagePage> {
+class _ViewReviewPageState extends State<ViewReviewPage> {
 
-  _ViewReviewPagePageState(){
-    ViewReviewPage();
+  _ViewReviewPageState(){
+    ViewReview();
   }
 
   List<String> id_ = <String>[];
+  List<String> review_= <String>[];
+  List<String> rating_= <String>[];
   List<String> date_= <String>[];
-  List<String> complaint_= <String>[];
-  List<String> reply_= <String>[];
-  List<String> status_= <String>[];
+  List<String> player_= <String>[];
 
-  Future<void> ViewReviewPage() async {
+
+  Future<void> ViewReview() async {
     List<String> id = <String>[];
-    List<String> date = <String>[];
-    List<String> complaint = <String>[];
-    List<String> reply = <String>[];
-    List<String> status = <String>[];
+    List<String> review= <String>[];
+    List<String> rating= <String>[];
+    List<String> date= <String>[];
+    List<String> player= <String>[];
+
 
 
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
-      String lid = sh.getString('lid').toString();
-      String url = '$urls/myapp/user_ViewReviewPage/';
+      String url = '$urls/coc_view_reviews/';
 
       var data = await http.post(Uri.parse(url), body: {
 
-        'lid':lid
 
       });
       var jsondata = json.decode(data.body);
@@ -77,18 +75,20 @@ class _ViewReviewPagePageState extends State<ViewReviewPagePage> {
 
       for (int i = 0; i < arr.length; i++) {
         id.add(arr[i]['id'].toString());
-        date.add(arr[i]['date']);
-        complaint.add(arr[i]['complaint']);
-        reply.add(arr[i]['reply']);
-        status.add(arr[i]['status']);
+        review.add(arr[i]['review'].toString());
+        rating.add(arr[i]['rating'].toString());
+        date.add(arr[i]['date'].toString());
+        player.add(arr[i]['player'].toString());
+
       }
 
       setState(() {
         id_ = id;
+        review_ = review;
+        rating_ = rating;
         date_ = date;
-        complaint_ = complaint;
-        reply_ = reply;
-        status_ = status;
+        player_ = player;
+
       });
 
       print(statuss);
@@ -112,16 +112,15 @@ class _ViewReviewPagePageState extends State<ViewReviewPagePage> {
         appBar: AppBar(
           leading: BackButton( onPressed:() {
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CoachHomePage(title: 'Reply Page',)),);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => HomeNewPage(title: 'Home',)),);
 
           },),
           backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(widget.title),
         ),
-        body:
-        ListView.builder(
+        body: ListView.builder(
           physics: BouncingScrollPhysics(),
           // padding: EdgeInsets.all(5.0),
           // shrinkWrap: true,
@@ -137,30 +136,58 @@ class _ViewReviewPagePageState extends State<ViewReviewPagePage> {
                     children: [
                       Card(
                         child:
-                        Row(
-                            children: [
-                              Column(
+                        Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(date_[index]),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(complaint_[index]),
-                                  ),    Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(reply_[index]),
-                                  ),  Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(status_[index]),
-                                  ),
+                                  Text("Review"),
+                                  Text(review_[index]),
                                 ],
                               ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Rating "),
 
-                            ]
-                        ),
+                                  Text(rating_[index]),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Date"),
 
+                                  Text(date_[index]),
+                                ],
+                              ),
+                            ), Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Player Name"),
+
+                                  Text(player_[index]),
+                                ],
+                              ),
+                            ),
+
+
+
+                          ],
+                        )
+
+
+                        ,
                         elevation: 8,
                         margin: EdgeInsets.all(10),
                       ),
@@ -171,9 +198,9 @@ class _ViewReviewPagePageState extends State<ViewReviewPagePage> {
         ),
         floatingActionButton: FloatingActionButton(onPressed: () {
 
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MySendComplaintPage(title: 'SendComplaint')));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => MySendtip_description()));
 
         },
           child: Icon(Icons.plus_one),
