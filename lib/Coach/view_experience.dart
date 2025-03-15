@@ -168,7 +168,13 @@ class _MyexperiencepageState extends State<Myexperiencepage> {
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async{
+
+                                SharedPreferences sh = await SharedPreferences.getInstance();
+
+                                sh.setString("achid", id_[index]);
+
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

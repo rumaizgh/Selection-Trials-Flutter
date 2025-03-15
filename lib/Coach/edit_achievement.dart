@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:selectiontrialsnew/Coach/edit_experience.dart';
+import 'package:selectiontrialsnew/Coach/view_achievement.dart';
 import 'package:selectiontrialsnew/Coach/view_experience.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -114,7 +115,7 @@ class _EditAchievementPageState extends State<EditAchievementPage> {
           Fluttertoast.showToast(msg: 'updated Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Myexperiencepage(title: 'View Labour ',)));
+              MaterialPageRoute(builder: (context) => MyViewAchievementPage(title: 'View Labour ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }
