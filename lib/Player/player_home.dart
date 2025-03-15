@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Player/change_password.dart';
+import 'package:selectiontrialsnew/Player/send_complaint.dart';
 import 'package:selectiontrialsnew/Player/send_review_about_academy.dart';
 import 'package:selectiontrialsnew/Player/view_academy_chat.dart';
 import 'package:selectiontrialsnew/Player/view_achievement_of_coach.dart';
@@ -10,6 +11,7 @@ import 'package:selectiontrialsnew/Player/view_applied_trials.dart';
 import 'package:selectiontrialsnew/Player/view_certificate_of_coach.dart';
 import 'package:selectiontrialsnew/Player/view_coach_and_follow.dart';
 import 'package:selectiontrialsnew/Player/view_experience_of_coach.dart';
+import 'package:selectiontrialsnew/Player/view_reply.dart';
 import 'package:selectiontrialsnew/Player/view_tips_of_coach.dart';
 import 'package:selectiontrialsnew/Player/view_coach_chat.dart';
 import 'package:selectiontrialsnew/Player/view_followed_coaches.dart';
@@ -364,15 +366,6 @@ class _PlayerHomeState extends State<PlayerHome> {
                 },
               ),
 
-              // ListTile(
-              //   leading: Icon(Icons.home),
-              //   title: const Text('Send Review About Academy'),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     Navigator.push(context, MaterialPageRoute(builder: (context) => SendReviewAcademyPage(title: '',),));
-              //   },
-              // ),
-
 
               ListTile(
                 leading: Icon(Icons.home),
@@ -380,6 +373,20 @@ class _PlayerHomeState extends State<PlayerHome> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAchievementCoach(),));
+                },
+              ),ListTile(
+                leading: Icon(Icons.home),
+                title: const Text('Send Complaint'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerSendComplaintPage(title: 'Send Complaint',),));
+                },
+              ),ListTile(
+                leading: Icon(Icons.home),
+                title: const Text('View Reply'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerViewReplyPage(title: 'View Reply',),));
                 },
               ),
 
