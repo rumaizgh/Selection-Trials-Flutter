@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:selectiontrialsnew/Coach/edit_experience.dart';
+import 'package:selectiontrialsnew/Coach/edit_tips.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,25 +22,25 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ViewTipsPage(title: 'Flutter Demo Home Page'),
+      home: const MyViewTipsPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class ViewTipsPage extends StatefulWidget {
-  const ViewTipsPage({super.key, required this.title});
+class MyViewTipsPage extends StatefulWidget {
+  const MyViewTipsPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<ViewTipsPage> createState() => _ViewTipsPageState();
+  State<MyViewTipsPage> createState() => _MyViewTipsPageState();
 }
 
-class _ViewTipsPageState extends State<ViewTipsPage> {
+class _MyViewTipsPageState extends State<MyViewTipsPage> {
   int _counter = 0;
 
-  _ViewTipsPageState() {
-    viewreply();
+  _MyViewTipsPageState() {
+    viewtips();
   }
 
 
@@ -46,13 +48,11 @@ class _ViewTipsPageState extends State<ViewTipsPage> {
   List<String> tip_title_ = <String>['tip_title'];
   List<String> tip_description_ = <String>['tip_description'];
 
-
-  Future<void> viewreply() async {
+  Future<void> viewtips() async {
 
     List<String> id = <String>[];
     List<String> tip_title = <String>[];
     List<String> tip_description = <String>[];
-
 
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
@@ -74,7 +74,6 @@ class _ViewTipsPageState extends State<ViewTipsPage> {
         id.add(arr[i]['id'].toString());
         tip_title.add(arr[i]['tip_title'].toString());
         tip_description.add(arr[i]['tip_description'].toString());
-
 
 
       }
@@ -126,7 +125,7 @@ class _ViewTipsPageState extends State<ViewTipsPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("tip_title"),
+                                  Text("Tip Title"),
                                   Text(tip_title_[index]),
                                 ],
                               ),
@@ -136,13 +135,30 @@ class _ViewTipsPageState extends State<ViewTipsPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("tip_description"),
+                                  Text("Tip Description"),
 
                                   Text(tip_description_[index]),
                                 ],
                               ),
                             ),
 
+                            ElevatedButton(
+                              onPressed: () async{
+
+                                SharedPreferences sh = await SharedPreferences.getInstance();
+
+                                sh.setString("achid", id_[index]);
+
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditTipsPage(title: ''),
+                                  ),
+                                );
+                              },
+                              child: Text('Edit'),
+                            )
 
 
                           ],
@@ -162,9 +178,6 @@ class _ViewTipsPageState extends State<ViewTipsPage> {
     );
   }
 }
-
-
-
 
 
 

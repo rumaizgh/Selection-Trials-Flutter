@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:selectiontrialsnew/Coach/add_achievement.dart';
+import 'package:selectiontrialsnew/Coach/add_certificate.dart';
 import 'package:selectiontrialsnew/Coach/add_experience.dart';
 import 'package:selectiontrialsnew/Coach/add_tips.dart';
 import 'package:selectiontrialsnew/Coach/change_password.dart';
@@ -15,7 +16,6 @@ import 'package:selectiontrialsnew/Coach/view_profile.dart';
 import 'package:selectiontrialsnew/Coach/view_reply.dart';
 import 'package:selectiontrialsnew/Coach/view_review.dart';
 import 'package:selectiontrialsnew/Coach/view_tips.dart';
-
 
 
 void main() {
@@ -114,7 +114,7 @@ class _CoachHomePage extends State<CoachHomePage> {
                 Navigator.pop(context); // Close the drawer
 
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ViewTipsPage(title: "View Tips ",)
+                    builder: (context) => MyViewTipsPage(title: "View Tips ",)
                 ));
               },
             ),
@@ -217,6 +217,16 @@ class _CoachHomePage extends State<CoachHomePage> {
 
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => MyViewAchievementPage(title: "View Achievement",)
+                ));// ose the drawer
+              },
+            ),ListTile(
+              title: const Text('Add Certificate'),
+              onTap: () {
+                // Update the UI or navigate to another screen
+                Navigator.pop(context); // Cl
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => AddCertificatePage(title: "Add Certificate",)
                 ));// ose the drawer
               },
             ),

@@ -107,7 +107,7 @@ class _AddTipsPageState extends State<AddTipsPage> {
           Fluttertoast.showToast(msg: 'Added Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ViewTipsPage(title: 'View Tips ',)));
+              MaterialPageRoute(builder: (context) => MyViewTipsPage(title: 'View Tips ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }
