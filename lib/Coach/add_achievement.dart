@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:selectiontrialsnew/Coach/coc_home.dart';
+import 'package:selectiontrialsnew/Coach/view_achievement.dart';
 import 'package:selectiontrialsnew/Player/player_home.dart';
+import 'package:selectiontrialsnew/Player/view_achievement_of_coach.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -111,7 +113,7 @@ class _MyAddAchievementPageState extends State<MyAddAchievementPage> {
           Fluttertoast.showToast(msg: 'Added Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CoachHomePage(title: 'Coach Home ',)));
+              MaterialPageRoute(builder: (context) => MyViewAchievementPage(title: 'Coach Home ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }

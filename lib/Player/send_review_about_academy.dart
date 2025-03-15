@@ -100,6 +100,7 @@ class _SendReviewAcademyPageState extends State<SendReviewAcademyPage> {
         'review':Review,
         'rating':Rating,
         'lid':lid,
+        'aid':sh.getString('aid').toString(),
 
 
       });

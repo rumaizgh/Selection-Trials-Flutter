@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Coach/chat_with_player.dart';
 import 'package:selectiontrialsnew/Coach/send_complaint.dart';
 import 'package:selectiontrialsnew/Player/chat_with_academy.dart';
+import 'package:selectiontrialsnew/Player/send_review_about_academy.dart';
 import 'package:selectiontrialsnew/Player/view_academy_chat.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -241,6 +242,20 @@ class _ViewAcademyChatPageState extends State<ViewAcademyChatPage> {
 
 
                                   }, child: Text("Chat")),
+
+                         ElevatedButton(onPressed: () async {
+                                                            SharedPreferences sh = await SharedPreferences.getInstance();
+                                                            sh.setString('aid', LOGIN_id_[index]);
+                                                            // sh.setString('name', name_[index]);
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(builder: (context) => SendReviewAcademyPage(title: 'Review')));
+
+
+
+
+
+                                                          }, child: Text("Review")),
 
 
                                 ],

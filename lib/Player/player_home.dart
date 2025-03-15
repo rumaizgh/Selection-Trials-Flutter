@@ -362,14 +362,19 @@ class _PlayerHomeState extends State<PlayerHome> {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ViewExperienceCoach(),));
                 },
-              ), ListTile(
-                leading: Icon(Icons.home),
-                title: const Text('Send Review About Academy'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SendReviewAcademyPage(title: '',),));
-                },
-              ), ListTile(
+              ),
+
+              // ListTile(
+              //   leading: Icon(Icons.home),
+              //   title: const Text('Send Review About Academy'),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) => SendReviewAcademyPage(title: '',),));
+              //   },
+              // ),
+
+
+              ListTile(
                 leading: Icon(Icons.home),
                 title: const Text('View Achievement of Coach'),
                 onTap: () {

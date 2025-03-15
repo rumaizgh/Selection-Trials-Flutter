@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:selectiontrialsnew/Coach/edit_achievement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -146,6 +147,23 @@ class _MyViewAchievementPageState extends State<MyViewAchievementPage> {
                               ],
                             ),
                           ),
+                          ElevatedButton(
+                            onPressed: () async{
+
+                              SharedPreferences sh = await SharedPreferences.getInstance();
+
+                              sh.setString("achid", id_[index]);
+
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditAchievementPage(title: ''),
+                                ),
+                              );
+                            },
+                            child: Text('Edit'),
+                          )
 
 
 

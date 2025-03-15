@@ -1,9 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:selectiontrialsnew/Coach/view_experience.dart';
+import 'package:selectiontrialsnew/Coach/view_reply.dart';
+import 'package:selectiontrialsnew/Coach/view_tips.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
 
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -17,26 +25,25 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyLoginPage(title: 'Flutter Demo Home Page'),
+      home: const SendReviewAcademyPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyLoginPage extends StatefulWidget {
-  const MyLoginPage({super.key, required this.title});
+class SendReviewAcademyPage extends StatefulWidget {
+  const SendReviewAcademyPage({super.key, required this.title});
 
 
   final String title;
 
   @override
-  State<MyLoginPage> createState() => _MyLoginPageState();
+  State<SendReviewAcademyPage> createState() => _SendReviewAcademyPageState();
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
+class _SendReviewAcademyPageState extends State<SendReviewAcademyPage> {
 
-
-  TextEditingController DateController=TextEditingController();
   TextEditingController ReviewController=TextEditingController();
+  TextEditingController DateController=TextEditingController();
   TextEditingController RatingController=TextEditingController();
 
 
@@ -60,21 +67,64 @@ class _MyLoginPageState extends State<MyLoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
-
-            TextFormField(controller: DateController,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Review about academy')),),
+            TextFormField(controller: ReviewController,decoration: InputDecoration(border: OutlineInputBorder(), label: Text('Review ')),),
             SizedBox(height: 20),
-            TextFormField(controller: ReviewController,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Review about academy')),),
+            TextFormField(controller: DateController,decoration: InputDecoration(border: OutlineInputBorder(), label: Text('Date ')),),
             SizedBox(height: 20),
-            TextFormField(controller: RatingController,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Review about academy')),),
+            TextFormField(controller: RatingController,decoration: InputDecoration(border: OutlineInputBorder(), label: Text('Rating ')),),
             SizedBox(height: 20),
 
 
-
-            ElevatedButton(onPressed: (){}, child: Text('Submit'))
+            ElevatedButton(onPressed: (){
+              send_Review();
+            }, child: Text('Submit'))
           ],
         ),
       ),
 
     );
   }
+  Future<void> send_Review() async {
+    String Review = ReviewController.text;
+    String Rating = RatingController.text;
+
+
+
+    SharedPreferences sh = await SharedPreferences.getInstance();
+    String url = sh.getString('url').toString();
+    String lid = sh.getString('lid').toString();
+
+    final urls = Uri.parse('$url/ply_send_review_about_academy/');
+    try {
+      final response = await http.post(urls, body: {
+        'review':Review,
+        'rating':Rating,
+        'lid':lid,
+        'aid':sh.getString('aid').toString(),
+
+
+      });
+      if (response.statusCode == 200) {
+        String status = jsonDecode(response.body)['status'];
+        if (status=='ok') {
+          Fluttertoast.showToast(msg: 'Added Successfully');
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ViewReplyPage(title: 'View Reply ',)));
+        }else {
+          Fluttertoast.showToast(msg: 'Incorrect Password');
+        }
+      }
+      else {
+        Fluttertoast.showToast(msg: 'Network Error');
+      }
+    }
+    catch (e){
+      Fluttertoast.showToast(msg: e.toString());
+    }
+
+
+
+  }
+
 }
