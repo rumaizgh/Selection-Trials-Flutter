@@ -132,17 +132,7 @@ class _CoachHomePage extends State<CoachHomePage> {
               },
             ),
 
-            ListTile(
-              title: const Text('View Certificate'),
-              onTap: () {
-                // Update the UI or navigate to another screen
-                Navigator.pop(context); // Cl
 
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Mycertificatepage(title: "Send Certificate",)
-                ));// ose the drawer
-              },
-            ),
 
             ListTile(
               title: const Text('Add Tips'),
@@ -227,6 +217,16 @@ class _CoachHomePage extends State<CoachHomePage> {
 
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => AddCertificatePage(title: "Add Certificate",)
+                ));// ose the drawer
+              },
+            ),ListTile(
+              title: const Text('View Certificate'),
+              onTap: () {
+                // Update the UI or navigate to another screen
+                Navigator.pop(context); // Cl
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => Mycertificatepage(title: "View Certificate",)
                 ));// ose the drawer
               },
             ),

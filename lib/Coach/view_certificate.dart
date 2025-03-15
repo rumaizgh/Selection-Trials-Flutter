@@ -57,7 +57,7 @@ class _MycertificatepageState extends State<Mycertificatepage> {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
       String lid = sh.getString('lid').toString();
-      String url = '$urls/myapp/user_viewreply/';
+      String url = '$urls/myapp/coc_view_certificate/';
 
       var data = await http.post(Uri.parse(url), body: {
 
@@ -74,9 +74,9 @@ class _MycertificatepageState extends State<Mycertificatepage> {
       for (int i = 0; i < arr.length; i++) {
         id.add(arr[i]['id'].toString());
         date.add(arr[i]['date']);
-        coachid.add(arr[i]['Coach name']);
+        coachid.add(arr[i]['coc_name']);
         file.add(arr[i]['file']);
-        certificate_type.add(arr[i]['certificate type']);
+        certificate_type.add(arr[i]['certificate_type']);
       }
 
       setState(() {
@@ -127,30 +127,58 @@ class _MycertificatepageState extends State<Mycertificatepage> {
                   children: [
                     Card(
                       child:
-                      Row(
-                          children: [
-                            Column(
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(date_[index]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(certificate_type_[index]),
-                                ),    Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(file_[index]),
-                                ),  Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(coachid_[index]),
-                                ),
+                                Text("Certificate"),
+                                Text(file_[index]),
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Certificate Name"),
 
-                          ]
-                      ),
+                                Text(certificate_type_[index]),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Awarded to"),
 
+                                Text(coachid_[index]),
+                              ],
+                            ),
+                          ), Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Issued date"),
+
+                                Text(date_[index]),
+                              ],
+                            ),
+                          ),
+
+
+
+                        ],
+                      )
+
+
+                      ,
                       elevation: 8,
                       margin: EdgeInsets.all(10),
                     ),

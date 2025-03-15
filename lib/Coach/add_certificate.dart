@@ -38,11 +38,15 @@ class AddCertificatePage extends StatefulWidget {
 
   final String title;
 
+
   @override
   State<AddCertificatePage> createState() => _AddCertificatePageState();
 }
 
 class _AddCertificatePageState extends State<AddCertificatePage> {
+
+  File? uploadimage;
+
 
   TextEditingController CertificatetypeController=TextEditingController();
 
