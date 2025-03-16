@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Coach/chat_with_player.dart';
+import 'package:selectiontrialsnew/Coach/edit_certificate.dart';
 import 'package:selectiontrialsnew/Coach/send_complaint.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,10 +60,12 @@ class _ViewCertificatePageState extends State<ViewCertificatePage> {
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
+      String lid = sh.getString('lid').toString();
       String url = '$urls/coc_view_certificate/';
 
       var data = await http.post(Uri.parse(url), body: {
 
+        'lid':lid
 
       });
       var jsondata = json.decode(data.body);
@@ -142,32 +145,48 @@ class _ViewCertificatePageState extends State<ViewCertificatePage> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(5),
-                                    child: Text(id_[index]),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Certificate Name"),
+                                        Text(certificate_type_[index]),
+                                      ],
+                                    ),
                                   ),
-
                                   Padding(
                                     padding: EdgeInsets.all(5),
-                                    child: Text(date_[index]),
-                                  ),    Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(certificate_type_[index]),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Issued Date"),
+
+                                        Text(date_[index]),
+                                      ],
+                                    ),
                                   ),
 
-                                  ElevatedButton(onPressed: () async {
-                                    SharedPreferences sh = await SharedPreferences.getInstance();
-                                    Navigator.push(
+
+                                  ElevatedButton(
+                                    onPressed: () async{
+
+                                      SharedPreferences sh = await SharedPreferences.getInstance();
+
+                                      sh.setString("achid", id_[index]);
+
+
+                                      Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => ChatWithPlayer(title: '')));
-
-
-
-
-
-                                  }, child: Text("Chat")),
+                                        MaterialPageRoute(
+                                          builder: (context) => EditExperiencePage(title: ''),
+                                        ),
+                                      );
+                                    },
+                                    child: Text('Edit'),
+                                  )
 
 
                                 ],
-                              ),
+                              )
 
                             ]
                         ),
