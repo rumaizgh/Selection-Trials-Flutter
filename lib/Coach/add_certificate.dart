@@ -88,7 +88,7 @@ class _AddCertificatePageState extends State<AddCertificatePage> {
                 child:Column(
                   children: [
                     Image(image: NetworkImage('https://cdn.pixabay.com/photo/2017/11/10/05/24/select-2935439_1280.png'),height: 200,width: 200,),
-                    Text('Select Image',style: TextStyle(color: Colors.cyan))
+                    Text('Select Image',style: TextStyle(color: Colors.red))
                   ],
                 ),
               ),
@@ -135,7 +135,7 @@ class _AddCertificatePageState extends State<AddCertificatePage> {
           Fluttertoast.showToast(msg: 'Added Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Mycertificatepage(title: 'View Labour ',)));
+              MaterialPageRoute(builder: (context) => ViewCertificatePage(title: 'View Labour ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }

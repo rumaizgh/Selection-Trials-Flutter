@@ -226,7 +226,7 @@ class _CoachHomePage extends State<CoachHomePage> {
                 Navigator.pop(context); // Cl
 
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Mycertificatepage(title: "View Certificate",)
+                    builder: (context) => ViewCertificatePage(title: "View Certificate",)
                 ));// ose the drawer
               },
             ),
