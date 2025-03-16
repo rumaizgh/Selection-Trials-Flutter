@@ -60,10 +60,12 @@ class _ViewReviewPageState extends State<ViewReviewPage> {
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
+      String lid = sh.getString('lid').toString();
       String url = '$urls/coc_view_reviews/';
 
       var data = await http.post(Uri.parse(url), body: {
 
+        'lid':lid
 
       });
       var jsondata = json.decode(data.body);

@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:selectiontrialsnew/Coach/edit_experience.dart';
-import 'package:selectiontrialsnew/Coach/view_experience.dart';
+import 'package:selectiontrialsnew/Coach/view_certificate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,33 +26,39 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const EditExperiencePage(title: 'Flutter Demo Home Page'),
+      home: const EditCertificate(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class EditExperiencePage extends StatefulWidget {
-  const EditExperiencePage({super.key, required this.title});
+class EditCertificate extends StatefulWidget {
+  const EditCertificate({super.key, required this.title});
 
 
 
   final String title;
 
   @override
-  State<EditExperiencePage> createState() => _EditExperiencePageState();
+  State<EditCertificate> createState() => _EditCertificateState();
 }
 
-class _EditExperiencePageState extends State<EditExperiencePage> {
+class _EditCertificateState extends State<EditCertificate> {
 
-  _EditExperiencePageState(){
+  _EditCertificateState(){
     _send_data();
   }
-  TextEditingController AcademynameController=TextEditingController();
-  TextEditingController FromyearController=TextEditingController();
-  TextEditingController ToyearController=TextEditingController();
-  TextEditingController PositionController=TextEditingController();
-
-
+  TextEditingController CertificateTypeController = TextEditingController();
+  TextEditingController PhotoController = TextEditingController();
+  
+  // int _counter = 0;
+  //
+  // void _incrementCounter() {
+  //   setState(() {
+  //
+  //     _counter++;
+  //   });
+  // }
+  String lphoto='';
   @override
   Widget build(BuildContext context) {
 
@@ -73,16 +77,35 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
 
-              TextFormField(controller: AcademynameController,decoration: InputDecoration(border: OutlineInputBorder(), label: Text('Name ')),),
-              SizedBox(height: 20),
-              TextFormField(controller:FromyearController ,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('From Year ')),),
-              SizedBox(height: 20),
-              TextFormField(controller:ToyearController ,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('To Year ')),),
-              SizedBox(height: 20),
-              TextFormField(controller:PositionController ,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Position ')),),
-              SizedBox(height: 20),
+
+              if (_selectedImage != null) ...{
+                InkWell(
+                  child:
+                  Image.file(_selectedImage!, height: 400,),
+                  radius: 399,
+                  onTap: _checkPermissionAndChooseImage,
+                  // borderRadius: BorderRadius.all(Radius.circular(200)),
+                ),
+              } else ...{
+                // Image(image: NetworkImage(),height: 100, width: 70,fit: BoxFit.cover,),
+                InkWell(
+                  onTap: _checkPermissionAndChooseImage,
+                  child:Column(
+                    children: [
+                      Image(image: NetworkImage(lphoto),height: 200,width: 200,),
+                      Text('Select Image',style: TextStyle(color: Colors.cyan))
+                    ],
+                  ),
+                ),
+              },
+              TextFormField(decoration: InputDecoration(labelText: 'name',
+                  border: OutlineInputBorder
+                    (borderRadius: BorderRadius.circular(20))),controller: CertificateTypeController,),
+              SizedBox(height: 30,),
+
+
               ElevatedButton(onPressed: (){
-                add_experience();
+                addlab();
               }, child: Text('Update'))
 
             ],
@@ -93,25 +116,23 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-  Future<void> add_experience() async {
-    String name = AcademynameController.text;
-    String fromyear = FromyearController.text;
-    String toyear = ToyearController.text;
-    String position = PositionController.text;
+  Future<void> addlab() async {
+    String certificate_type = CertificateTypeController.text;
+
 
 
 
     SharedPreferences sh = await SharedPreferences.getInstance();
     String url = sh.getString('url').toString();
     String lid = sh.getString('lid').toString();
+    String labid = sh.getString('labid').toString();
 
-    final urls = Uri.parse('$url/coc_edit_experience/');
+    final urls = Uri.parse('$url/coc_edit_certificate/');
     try {
       final response = await http.post(urls, body: {
-        'name':name,
-        'fromyear':fromyear,
-        'toyear':toyear,
-        'position':position,
+        'name':certificate_type,
+        'photo':photo,
+        'labid':labid,
         'lid':lid,
 
 
@@ -122,7 +143,7 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
           Fluttertoast.showToast(msg: 'updated Successfully');
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Myexperiencepage(title: 'View Labour ',)));
+              MaterialPageRoute(builder: (context) => ViewCertificate(title: 'View Certificate ',)));
         }else {
           Fluttertoast.showToast(msg: 'Incorrect Password');
         }
@@ -140,9 +161,45 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
   }
 
 
+  File? _selectedImage;
+  String? _encodedImage;
+  Future<void> _chooseAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
+    if (pickedImage != null) {
+      setState(() {
+        _selectedImage = File(pickedImage.path);
+        _encodedImage = base64Encode(_selectedImage!.readAsBytesSync());
+        photo = _encodedImage.toString();
+      });
+    }
+  }
 
+  Future<void> _checkPermissionAndChooseImage() async {
+    final PermissionStatus status = await Permission.mediaLibrary.request();
+    if (status.isGranted) {
+      _chooseAndUploadImage();
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Permission Denied'),
+          content: const Text(
+            'Please go to app settings and grant permission to choose an image.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
+  String photo = '';
 
 
 
@@ -155,11 +212,14 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
     SharedPreferences sh = await SharedPreferences.getInstance();
     String url = sh.getString('url').toString();
     String lid = sh.getString('lid').toString();
+    String img = sh.getString('imgurl').toString();
+    String labid = sh.getString('labid').toString();
 
-    final urls = Uri.parse('$url/coc_edit_experience_get/');
+    final urls = Uri.parse('$url/coc_edit_certificate_get/');
     try {
       final response = await http.post(urls, body: {
         'lid':lid,
+        'labid':labid,
 
 
 
@@ -167,19 +227,14 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
       if (response.statusCode == 200) {
         String status = jsonDecode(response.body)['status'];
         if (status=='ok') {
-          String name=jsonDecode(response.body)['name'].toString();
-          String fromyear=jsonDecode(response.body)['fromyear'].toString();
-          String toyear=jsonDecode(response.body)['toyear'].toString();
-          String position=jsonDecode(response.body)['position'].toString();
+          String certificate_type=jsonDecode(response.body)['certificate_type'].toString();
+          String photo=img+jsonDecode(response.body)['photo'].toString();
 
 
           setState(() {
 
-            AcademynameController.text= name;
-            FromyearController.text=fromyear;
-            ToyearController.text= toyear;
-            PositionController.text= position;
-
+            CertificateTypeController.text= certificate_type;
+            lphoto= photo;
           });
 
 
@@ -201,145 +256,3 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
 
 
 }
-
-
-
-
-
-//riss
-
-
-// import 'dart:convert';
-//
-// import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:selectiontrialsnew/Coach/view_experience.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
-//
-//
-// void main() {
-//   runApp(const MyApp());
-// }
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-//         useMaterial3: true,
-//       ),
-//       home: const EditExperiencePage(title: 'Flutter Demo Home Page'),
-//     );
-//   }
-// }
-//
-// class EditExperiencePage extends StatefulWidget {
-//   const EditExperiencePage({super.key, required this.title});
-//
-//
-//   final String title;
-//
-//   @override
-//   State<EditExperiencePage> createState() => _EditExperiencePageState();
-// }
-//
-// class _EditExperiencePageState extends State<EditExperiencePage> {
-//
-//   TextEditingController AcademynameController=TextEditingController();
-//   TextEditingController FromyearController=TextEditingController();
-//   TextEditingController ToyearController=TextEditingController();
-//   TextEditingController PositionController=TextEditingController();
-//
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//
-//         child: Column(
-//
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//
-//             TextFormField(controller: AcademynameController,decoration: InputDecoration(border: OutlineInputBorder(), label: Text('Name ')),),
-//             SizedBox(height: 20),
-//             TextFormField(controller:FromyearController ,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('From Year ')),),
-//             SizedBox(height: 20),
-//             TextFormField(controller:ToyearController ,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('To Year ')),),
-//             SizedBox(height: 20),
-//             TextFormField(controller:PositionController ,decoration: InputDecoration(border: OutlineInputBorder(),label: Text('Position ')),),
-//             SizedBox(height: 20),
-//
-//
-//             ElevatedButton(onPressed: (){
-//               add_experience();
-//             }, child: Text('Submit'))
-//           ],
-//         ),
-//       ),
-//
-//     );
-//   }
-//   Future<void> add_experience() async {
-//     String name = AcademynameController.text;
-//     String fromyear = FromyearController.text;
-//     String toyear = ToyearController.text;
-//     String position = PositionController.text;
-//
-//
-//
-//     SharedPreferences sh = await SharedPreferences.getInstance();
-//     String url = sh.getString('url').toString();
-//     String lid = sh.getString('lid').toString();
-//
-//     final urls = Uri.parse('$url/coc_add_experience/');
-//     try {
-//       final response = await http.post(urls, body: {
-//         'name':name,
-//         'fromyear':fromyear,
-//         'toyear':toyear,
-//         'position':position,
-//         'lid':lid,
-//
-//
-//       });
-//       if (response.statusCode == 200) {
-//         String status = jsonDecode(response.body)['status'];
-//         if (status=='ok') {
-//           Fluttertoast.showToast(msg: 'Added Successfully');
-//           Navigator.push(
-//               context,
-//               MaterialPageRoute(builder: (context) => Myexperiencepage(title: 'View Experience ',)));
-//         }else {
-//           Fluttertoast.showToast(msg: 'Incorrect Password');
-//         }
-//       }
-//       else {
-//         Fluttertoast.showToast(msg: 'Network Error');
-//       }
-//     }
-//     catch (e){
-//       Fluttertoast.showToast(msg: e.toString());
-//     }
-//
-//
-//
-//   }
-//
-// }

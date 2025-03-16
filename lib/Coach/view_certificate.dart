@@ -177,7 +177,7 @@ class _ViewCertificatePageState extends State<ViewCertificatePage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => EditExperiencePage(title: ''),
+                                          builder: (context) => EditCertificate(title: ''),
                                         ),
                                       );
                                     },

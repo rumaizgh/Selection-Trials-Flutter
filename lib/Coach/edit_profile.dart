@@ -189,8 +189,7 @@ class _MyEditPageState extends State<MyEditPage> {
           String city = jsonDecode(response.body)['city'].toString();
           String h_name = jsonDecode(response.body)['h_name'].toString();
           String state = jsonDecode(response.body)['state'].toString();
-          String photo = sh.getString("imgurl").toString() +
-              jsonDecode(response.body)['photo'];
+          String photo = sh.getString("imgurl").toString() + jsonDecode(response.body)['photo'];
 
           setState(() {
             Namecontroller.text = name;
