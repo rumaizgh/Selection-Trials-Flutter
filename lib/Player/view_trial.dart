@@ -186,41 +186,44 @@ class _ViewTrialPageState extends State<ViewTrialPage> {
                                     child: Text(academy_name_[index]),
                                   ),
 
-                                  ElevatedButton(onPressed: () async {
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      SharedPreferences sh = await SharedPreferences.getInstance();
+                                      String url = sh.getString('url').toString();
+                                      String lid = sh.getString('lid').toString();
 
-                                    SharedPreferences sh = await SharedPreferences.getInstance();
-                                    String url = sh.getString('url').toString();
-                                    String lid = sh.getString('lid').toString();
+                                      final urls = Uri.parse('$url/ply_apply_trial/');
+                                      try {
+                                        final response = await http.post(urls, body: {
+                                          'tid': id_[index],
+                                          'lid': lid,
+                                        });
 
-                                    final urls = Uri.parse('$url/ply_apply_trial/');
-                                    try {
-                                      final response = await http.post(urls, body: {
-                                        'tid':id_[index],
-                                        'lid':lid,
+                                        if (response.statusCode == 200) {
+                                          String status = jsonDecode(response.body)['status'];
+                                          if (status == 'ok') {
+                                            Fluttertoast.showToast(msg: 'Applied');
 
+                                            // Reload the trials list after applying
+                                            setState(() {
+                                              ViewTrial(); // Refresh the list of trials
+                                            });
 
-                                      });
-                                      if (response.statusCode == 200) {
-                                        String status = jsonDecode(response.body)['status'];
-                                        if (status=='ok') {
-                                          Fluttertoast.showToast(msg: 'Applied');
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => PlayerHome(title: 'Player Home ',)));
-                                        }else {
-                                          Fluttertoast.showToast(msg: 'Incorrect Password');
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => PlayerHome(title: 'Player Home ')));
+                                          } else {
+                                            Fluttertoast.showToast(msg: 'Error applying for trial');
+                                          }
+                                        } else {
+                                          Fluttertoast.showToast(msg: 'Network Error');
                                         }
+                                      } catch (e) {
+                                        Fluttertoast.showToast(msg: e.toString());
                                       }
-                                      else {
-                                        Fluttertoast.showToast(msg: 'Network Error');
-                                      }
-                                    }
-                                    catch (e){
-                                      Fluttertoast.showToast(msg: e.toString());
-                                    }
-
-
-                                  }, child: Text("Apply")),
+                                    },
+                                    child: Text("Apply"),
+                                  )
 
 
 

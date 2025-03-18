@@ -248,14 +248,10 @@ class _PlayerHomeState extends State<PlayerHome> {
                 Column(children: [
 
                   Text(
-                    'CliniSync',
+                    'Player Home',
                     style: TextStyle(fontSize: 20,color: Colors.white),
 
                   ),
-                  CircleAvatar(radius: 29,backgroundImage: NetworkImage(uphoto_)),
-                  Text(uname_,style: TextStyle(color: Colors.white)),
-                  Text(email_,style: TextStyle(color: Colors.white)),
-
 
 
                 ])

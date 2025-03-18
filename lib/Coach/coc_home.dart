@@ -65,7 +65,7 @@ class _CoachHomePage extends State<CoachHomePage> {
                 color: Colors.red,
               ),
               child: Text(
-                'Labour Home',
+                'Coach Home',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
