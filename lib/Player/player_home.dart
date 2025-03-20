@@ -156,9 +156,7 @@ class _PlayerHomeState extends State<PlayerHome> {
 
     });
 
-
   }
-
 
   TextEditingController unameController = new TextEditingController();
   TextEditingController passController = new TextEditingController();

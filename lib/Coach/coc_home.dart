@@ -16,6 +16,8 @@ import 'package:selectiontrialsnew/Coach/view_profile.dart';
 import 'package:selectiontrialsnew/Coach/view_reply.dart';
 import 'package:selectiontrialsnew/Coach/view_review.dart';
 import 'package:selectiontrialsnew/Coach/view_tips.dart';
+import 'package:selectiontrialsnew/Coach/upload_video.dart';
+import 'package:selectiontrialsnew/Coach/view_videos.dart';
 
 
 void main() {
@@ -127,6 +129,29 @@ class _CoachHomePage extends State<CoachHomePage> {
 
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => ViewChatPlayer(title: "View Player to Chat",)
+                ));
+                // Close the drawer
+              },
+            ),ListTile(
+              title: const Text('Upload Video'),
+              onTap: () {
+                // Update the UI or navigate to another screen
+                Navigator.pop(context);
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => UploadVideoPage(title: "Upload Video",)
+                ));
+                // Close the drawer
+              },
+            ),
+            ListTile(
+              title: const Text('View Video'),
+              onTap: () {
+                // Update the UI or navigate to another screen
+                Navigator.pop(context);
+
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ViewVideoPage(title: "View Video",)
                 ));
                 // Close the drawer
               },
