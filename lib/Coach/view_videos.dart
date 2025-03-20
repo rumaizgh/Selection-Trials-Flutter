@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:selectiontrialsnew/Coach/chat_with_player.dart';
 import 'package:selectiontrialsnew/Coach/edit_certificate.dart';
 import 'package:selectiontrialsnew/Coach/send_complaint.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'coc_home.dart';
 
 void main() {
@@ -20,6 +22,7 @@ class ViewVideo extends StatelessWidget {
     return MaterialApp(
       title: 'View Certificate',
       theme: ThemeData(
+
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 18, 82, 98)),
         useMaterial3: true,
       ),
@@ -39,113 +42,93 @@ class ViewVideoPage extends StatefulWidget {
 
 class _ViewVideoPageState extends State<ViewVideoPage> {
 
-  // State variables for storing video data
+  _ViewVideoPageState(){
+    ViewVideo();
+  }
+
   List<String> id_ = <String>[];
-  List<String> date_ = <String>[];
-  List<String> video_detail_ = <String>[];
-  List<String> video_title_ = <String>[];
-  List<String> video_ = <String>[];
+  List<String> date_= <String>[];
+  List<String> video_title_= <String>[];
+  List<String> video_details_= <String>[];
+  List<String> video_= <String>[];
 
-  // Function to load videos from the backend
-  Future<void> viewVideo() async {
+  Future<void> ViewVideo() async {
+    List<String> id = <String>[];
+    List<String> date= <String>[];
+    List<String> video_title= <String>[];
+    List<String> video_details= <String>[];
+    List<String> video= <String>[];
+
     try {
-      // Show a loading spinner or some indication that the data is being loaded
-      Fluttertoast.showToast(msg: "Loading videos... Please wait.", toastLength: Toast.LENGTH_SHORT);
-
-      // Get shared preferences
       SharedPreferences sh = await SharedPreferences.getInstance();
-      String baseUrl = sh.getString('url') ?? '';
-      String lid = sh.getString('lid') ?? '';
-      String imgUrl = sh.getString('imgurl') ?? '';
+      String urls = sh.getString('url').toString();
+      String lid = sh.getString('lid').toString();
+      String url = '$urls/coc_view_videos/';
 
-      // Construct the API endpoint
-      String url = '$baseUrl/coc_view_videos/';
+      var data = await http.post(Uri.parse(url), body: {
 
-      // Make the HTTP POST request
-      var response = await http.post(
-        Uri.parse(url),
-        body: {'lid': lid},
-      );
+        'lid':lid
 
-      // Check the response status
-      if (response.statusCode == 200) {
-        // Decode the JSON response
-        var jsonData = json.decode(response.body);
-        String status = jsonData['status'];
+      });
+      var jsondata = json.decode(data.body);
+      String statuss = jsondata['status'];
 
-        if (status == "success") {
-          var videoData = jsonData["data"];
+      var arr = jsondata["data"];
 
-          // Temporary lists to store video data
-          List<String> tempIds = [];
-          List<String> tempDates = [];
-          List<String> tempTitles = [];
-          List<String> tempDetails = [];
-          List<String> tempVideos = [];
+      print(arr.length);
 
-          // Populate the lists with video data
-          for (var item in videoData) {
-            tempIds.add(item['id'].toString());
-            tempDates.add(item['date'].toString());
-            tempTitles.add(item['videotitle'].toString());
-            tempDetails.add(item['videodetails'].toString());
-            tempVideos.add('$imgUrl${item['videofile']}');
-          }
+      for (int i = 0; i < arr.length; i++) {
+        id.add(arr[i]['id'].toString());
+        date.add(arr[i]['date'].toString());
+        video_title.add(arr[i]['videotitle'].toString());
+        video_details.add(arr[i]['videodetails'].toString());
+        video.add(sh.getString('imgurl').toString()+arr[i]['videofile']);
 
-          // Update state with new data
-          setState(() {
-            id_ = tempIds;
-            date_ = tempDates;
-            video_title_ = tempTitles;
-            video_detail_ = tempDetails;
-            video_ = tempVideos;
-          });
-
-          Fluttertoast.showToast(msg: "Videos loaded successfully.", toastLength: Toast.LENGTH_SHORT);
-        } else {
-          Fluttertoast.showToast(
-            msg: "Failed to load videos: ${jsonData['message']}",
-            toastLength: Toast.LENGTH_SHORT,
-          );
-        }
-      } else {
-        Fluttertoast.showToast(
-          msg: "Network Error: Failed to retrieve data.",
-          toastLength: Toast.LENGTH_SHORT,
-        );
       }
+
+      setState(() {
+        id_ = id;
+        date_ = date;
+        video_title_ = video_title;
+        video_details_ = video_details;
+        video_ = video;
+
+      });
+
+      print(statuss);
     } catch (e) {
-      print("Error loading videos: $e");
-      Fluttertoast.showToast(
-        msg: "Error: ${e.toString()}",
-        toastLength: Toast.LENGTH_SHORT,
-      );
+      print("Error ------------------- " + e.toString());
+      //there is error during converting file image to base64 encoding.
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    viewVideo();  // Call to load the videos when the page is initialized
-  }
+
+
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return WillPopScope(
-      onWillPop: () async { return true; },
+      onWillPop: () async{ return true; },
       child: Scaffold(
         appBar: AppBar(
           leading: BackButton( onPressed:() {
+
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CoachHomePage(title: 'Chat Page',)),
-            );
-          }),
+              MaterialPageRoute(builder: (context) => CoachHomePage(title: 'Chat Page',)),);
+
+          },),
           backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(widget.title),
         ),
-        body: ListView.builder(
+        body:
+        ListView.builder(
           physics: BouncingScrollPhysics(),
+          // padding: EdgeInsets.all(5.0),
+          // shrinkWrap: true,
           itemCount: id_.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -153,71 +136,134 @@ class _ViewVideoPageState extends State<ViewVideoPage> {
                 print("long press" + index.toString());
               },
               title: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Card(
-                      child: Row(
-                        children: [
-                          Image(image: NetworkImage(video_[index]), height: 100, width: 100,),
-                          Column(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Card(
+                        child:
+                        Row(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Title"),
-                                    Text(video_title_[index]),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Details"),
-                                    Text(video_detail_[index]),
-                                  ],
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  SharedPreferences sh = await SharedPreferences.getInstance();
-                                  sh.setString("achid", id_[index]);
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditCertificate(title: ''),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Video Title"),
+                                        Text(video_title_[index]),
+                                      ],
                                     ),
-                                  );
-                                },
-                                child: Text('Edit'),
-                              ),
-                            ],
-                          ),
-                        ],
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Issued Date"),
+
+                                        Text(date_[index]),
+                                      ],
+                                    ),
+                                  ),Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Issued Date"),
+
+                                        Text(date_[index]),
+                                      ],
+                                    ),
+                                  ),Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Video Details"),
+
+                                        Text(video_details_[index]),
+                                      ],
+                                    ),
+                                  ),
+
+
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        final url=video_[index];
+                                        // Launch the URL
+                                        if (await canLaunch(url)) {
+                                          await launch(url);
+                                        } else {
+                                          throw 'Could not launch $url';
+                                        }
+                                      }, child: Text("video"),),
+                                  ElevatedButton(
+                                      onPressed: () async {
+
+                                        SharedPreferences sh = await SharedPreferences.getInstance();
+                                        String url = sh.getString('url').toString();
+                                        String lid = sh.getString('lid').toString();
+
+                                        final urls = Uri.parse('$url/coc_delete_video/');
+                                        try {
+                                          final response = await http.post(urls, body: {
+
+                                            'id':id_[index],
+
+
+
+                                          });
+                                          if (response.statusCode == 200) {
+                                            String status = jsonDecode(response.body)['status'];
+                                            if (status=='ok') {
+                                              Fluttertoast.showToast(msg: 'Deleted Successfully');
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => ViewVideoPage(title: 'View Videos',)));
+                                            }else {
+                                              Fluttertoast.showToast(msg: 'Incorrect Password');
+                                            }
+                                          }
+                                          else {
+                                            Fluttertoast.showToast(msg: 'Network Error');
+                                          }
+                                        }
+                                        catch (e){
+                                          Fluttertoast.showToast(msg: e.toString());
+                                        }
+
+
+                                      }, child: Text("delete"),)
+
+                                ],
+                              )
+
+                            ]
+                        ),
+
+                        elevation: 8,
+                        margin: EdgeInsets.all(10),
                       ),
-                      elevation: 8,
-                      margin: EdgeInsets.all(10),
-                    ),
-                  ],
-                ),
-              ),
+                    ],
+                  )),
             );
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+
+
+        floatingActionButton: FloatingActionButton(onPressed: () {
+
+          Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MySendComplaintPage(title: 'SendComplaint')),
-            );
-          },
+              MaterialPageRoute(builder: (context) => MySendComplaintPage(title: 'SendComplaint')));
+
+        },
           child: Icon(Icons.plus_one),
         ),
+
+
       ),
     );
   }

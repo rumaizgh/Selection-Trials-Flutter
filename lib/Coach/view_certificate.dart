@@ -172,6 +172,9 @@ class _ViewCertificatePageState extends State<ViewCertificatePage> {
                                       SharedPreferences sh = await SharedPreferences.getInstance();
 
                                       sh.setString("achid", id_[index]);
+                                      // sh.setString("date", date_[index]);
+                                      // sh.setString("certificate_type", certificate_type_[index]);
+                                      // sh.setString("photo", photo_[index]);
 
 
                                       Navigator.push(

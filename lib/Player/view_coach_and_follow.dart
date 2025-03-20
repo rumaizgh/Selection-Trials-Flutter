@@ -23,7 +23,7 @@ class ViewFollowCoach extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 18, 82, 98)),
         useMaterial3: true,
       ),
-      home: const ViewCoachFollowPage(title: 'View Reply'),
+      home: const ViewCoachFollowPage(title: 'View Coaches to chat'),
     );
   }
 }
@@ -55,7 +55,6 @@ class _ViewCoachFollowPageState extends State<ViewCoachFollowPage> {
   List<String> email_= <String>[];
   List<String> country_= <String>[];
   List<String> phone_= <String>[];
-  List<String> LOGIN_id_= <String>[];
 
   Future<void> ViewFollowCoach() async {
     List<String> id = <String>[];
@@ -70,14 +69,13 @@ class _ViewCoachFollowPageState extends State<ViewCoachFollowPage> {
     List<String> email= <String>[];
     List<String> country= <String>[];
     List<String> phone= <String>[];
-    List<String> LOGIN_id= <String>[];
 
 
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
       String lid = sh.getString('lid').toString();
-      String url = '$urls/ply_view_chat_coach/';
+      String url = '$urls/ply_view_coach_to_follow/';
 
       var data = await http.post(Uri.parse(url), body: {
 
@@ -104,7 +102,6 @@ class _ViewCoachFollowPageState extends State<ViewCoachFollowPage> {
         email.add(arr[i]['email'].toString());
         country.add(arr[i]['country'].toString());
         phone.add(arr[i]['phone'].toString());
-        LOGIN_id.add(arr[i]['LOGIN_id'].toString());
       }
 
       setState(() {
@@ -120,7 +117,6 @@ class _ViewCoachFollowPageState extends State<ViewCoachFollowPage> {
         email_ = email;
         country_ = country;
         phone_ = phone;
-        LOGIN_id_ = LOGIN_id;
       });
 
       print(statuss);
@@ -226,7 +222,7 @@ class _ViewCoachFollowPageState extends State<ViewCoachFollowPage> {
                                     String lid = sh.getString('lid').toString();
                                     String cid = sh.getString('cid').toString();
 
-                                    final urls = Uri.parse('$url/ply_view_coach_and_follow/');
+                                    final urls = Uri.parse('$url/ply_follow_coach/');
                                     try {
                                       final response = await http.post(urls, body: {
                                         'cid':id_[index],

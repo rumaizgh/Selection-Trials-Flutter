@@ -37,6 +37,7 @@ dependencies:
   image_picker:
   permission_handler:
   http_parser:
+  url_launcher: ^6.1.5
   #  path_provider:
   video_player:
 #  video_thumbnail:

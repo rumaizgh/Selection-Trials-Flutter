@@ -68,11 +68,11 @@ class _ViewTrialPageState extends State<ViewTrialPage> {
     try {
       SharedPreferences sh = await SharedPreferences.getInstance();
       String urls = sh.getString('url').toString();
+      String lid = sh.getString('lid').toString();
       String url = '$urls/ply_view_trial/';
 
       var data = await http.post(Uri.parse(url), body: {
-
-
+        'lid':lid,
       });
       var jsondata = json.decode(data.body);
       String statuss = jsondata['status'];

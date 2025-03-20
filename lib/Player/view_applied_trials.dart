@@ -48,6 +48,7 @@ class _ViewAppliedTrialsPageState extends State<ViewAppliedTrialsPage> {
   List<String> id_ = <String>[];
   List<String> date_= <String>[];
   List<String> status_= <String>[];
+  List<String> name_= <String>[];
 
 
   Future<void> ViewAppliedTrials() async {
@@ -55,6 +56,7 @@ class _ViewAppliedTrialsPageState extends State<ViewAppliedTrialsPage> {
     List<String> id = <String>[];
     List<String> date= <String>[];
     List<String> status= <String>[];
+    List<String> name= <String>[];
 
 
 
@@ -80,6 +82,7 @@ class _ViewAppliedTrialsPageState extends State<ViewAppliedTrialsPage> {
         id.add(arr[i]['id'].toString());
         date.add(arr[i]['date'].toString());
         status.add(arr[i]['status'].toString());
+        name.add(arr[i]['name'].toString());
 
       }
 
@@ -87,6 +90,7 @@ class _ViewAppliedTrialsPageState extends State<ViewAppliedTrialsPage> {
         id_ = id;
         date_ = date;
         status_ = status;
+        name_ = name;
       });
 
       print(statuss);
@@ -143,6 +147,10 @@ class _ViewAppliedTrialsPageState extends State<ViewAppliedTrialsPage> {
                                   Padding(
                                     padding: EdgeInsets.all(5),
                                     child: Text(id_[index]),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Text(name_[index]),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(5),

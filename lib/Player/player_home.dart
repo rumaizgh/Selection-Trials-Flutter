@@ -17,6 +17,7 @@ import 'package:selectiontrialsnew/Player/view_coach_chat.dart';
 import 'package:selectiontrialsnew/Player/view_followed_coaches.dart';
 import 'package:selectiontrialsnew/Player/view_profile.dart';
 import 'package:selectiontrialsnew/Player/view_trial.dart';
+import 'package:selectiontrialsnew/Player/view_videos_of_coach.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -289,14 +290,14 @@ class _PlayerHomeState extends State<PlayerHome> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ViewFollowedCoachPage(title: 'View Followed Coaches',),));
                 },
               ),
-              ListTile(
-                leading: Icon(Icons.home),
-                title: const Text('Chat with Coach'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCoachChatPage(title: 'View Coach to Chat'),));
-                },
-              ),
+              // ListTile(
+              //   leading: Icon(Icons.home),
+              //   title: const Text('Chat with Coach'),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCoachChatPage(title: 'View Coach to Chat'),));
+              //   },
+              // ),
               ListTile(
                 leading: Icon(Icons.home),
                 title: const Text('Follow Coach'),
@@ -367,6 +368,14 @@ class _PlayerHomeState extends State<PlayerHome> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAchievementCoach(),));
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.home),
+                title: const Text('View Videos of coach'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewVideoOfCoach(title: 'View videos of coach'),));
                 },
               ),ListTile(
                 leading: Icon(Icons.home),

@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:selectiontrialsnew/Coach/view_certificate.dart';
+import 'package:selectiontrialsnew/Coach/view_videos.dart';
 import 'package:selectiontrialsnew/Player/view_certificate_of_coach.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -157,7 +158,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
         Fluttertoast.showToast(msg: 'Video Uploaded Successfully');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewCertificatePage(title: 'View Labour')),
+          MaterialPageRoute(builder: (context) => ViewVideoPage(title: 'View Labour')),
         );
       } else {
         Fluttertoast.showToast(msg: 'Error: ${jsonResponse['status']}');

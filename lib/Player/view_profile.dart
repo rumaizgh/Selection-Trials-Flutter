@@ -97,10 +97,6 @@ class _ViewPlayerProfileState extends State<ViewPlayerProfile> {
                       ],
                     ),
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.all(5),
-                  //   child: Text(email_),
-                  // ),
                   Padding(
                     padding: EdgeInsets.all(5),
                     child: Row(

@@ -45,10 +45,58 @@ class EditCertificate extends StatefulWidget {
 class _EditCertificateState extends State<EditCertificate> {
 
   _EditCertificateState(){
-    _send_data();
+    _view_data();
   }
   TextEditingController CertificateTypeController = TextEditingController();
   TextEditingController PhotoController = TextEditingController();
+
+
+
+  String name_="";
+  String cphoto_="";
+
+  void _view_data() async{
+
+
+
+    SharedPreferences sh = await SharedPreferences.getInstance();
+    String url = sh.getString('url').toString();
+    String lid = sh.getString('lid').toString();
+    String id = sh.getString('achid').toString();
+
+    final urls = Uri.parse('$url/coc_edit_certificate_get/');
+    try {
+      final response = await http.post(urls, body: {
+        'lid':lid,
+        'id':id
+
+
+
+      });
+      if (response.statusCode == 200) {
+        String status = jsonDecode(response.body)['status'];
+        if (status=='ok') {
+          String name=jsonDecode(response.body)['name'].toString();
+          String photo=sh.getString("imgurl").toString()+jsonDecode(response.body)['photo'];
+
+          setState(() {
+
+            CertificateTypeController.text= name;
+            cphoto_= photo;
+          });
+
+        }else {
+          Fluttertoast.showToast(msg: 'Not Found');
+        }
+      }
+      else {
+        Fluttertoast.showToast(msg: 'Network Error');
+      }
+    }
+    catch (e){
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
   
   // int _counter = 0;
   //
@@ -92,7 +140,7 @@ class _EditCertificateState extends State<EditCertificate> {
                   onTap: _checkPermissionAndChooseImage,
                   child:Column(
                     children: [
-                      Image(image: NetworkImage(lphoto),height: 200,width: 200,),
+                      Image(image: NetworkImage(cphoto_),height: 200,width: 200,),
                       Text('Select Image',style: TextStyle(color: Colors.cyan))
                     ],
                   ),
@@ -105,7 +153,7 @@ class _EditCertificateState extends State<EditCertificate> {
 
 
               ElevatedButton(onPressed: (){
-                addlab();
+                _send_data();
               }, child: Text('Update'))
 
             ],
@@ -116,49 +164,27 @@ class _EditCertificateState extends State<EditCertificate> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-  Future<void> addlab() async {
-    String certificate_type = CertificateTypeController.text;
-
-
-
-
-    SharedPreferences sh = await SharedPreferences.getInstance();
-    String url = sh.getString('url').toString();
-    String lid = sh.getString('lid').toString();
-    String labid = sh.getString('labid').toString();
-
-    final urls = Uri.parse('$url/coc_edit_certificate/');
-    try {
-      final response = await http.post(urls, body: {
-        'name':certificate_type,
-        'photo':photo,
-        'labid':labid,
-        'lid':lid,
-
-
-      });
-      if (response.statusCode == 200) {
-        String status = jsonDecode(response.body)['status'];
-        if (status=='ok') {
-          Fluttertoast.showToast(msg: 'updated Successfully');
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ViewCertificate(title: 'View Certificate ',)));
-        }else {
-          Fluttertoast.showToast(msg: 'Incorrect Password');
-        }
-      }
-      else {
-        Fluttertoast.showToast(msg: 'Network Error');
-      }
-    }
-    catch (e){
-      Fluttertoast.showToast(msg: e.toString());
-    }
-
-
-
-  }
+  // Future<void> addlab() async {
+  //   String name = CertificateTypeController.text;
+  //
+  //   SharedPreferences sh = await SharedPreferences.getInstance();
+  //   String url = sh.getString('url').toString();
+  //   String lid = sh.getString('lid').toString();
+  //
+  //
+  //
+  //
+  //
+  //   photo = sh.getString('photo').toString();
+  //   name = sh.getString('name').toString();
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  // }
 
 
   File? _selectedImage;
@@ -171,7 +197,7 @@ class _EditCertificateState extends State<EditCertificate> {
       setState(() {
         _selectedImage = File(pickedImage.path);
         _encodedImage = base64Encode(_selectedImage!.readAsBytesSync());
-        photo = _encodedImage.toString();
+        photo_ = _encodedImage.toString();
       });
     }
   }
@@ -199,7 +225,7 @@ class _EditCertificateState extends State<EditCertificate> {
     }
   }
 
-  String photo = '';
+  String photo_="";
 
 
 
@@ -212,14 +238,16 @@ class _EditCertificateState extends State<EditCertificate> {
     SharedPreferences sh = await SharedPreferences.getInstance();
     String url = sh.getString('url').toString();
     String lid = sh.getString('lid').toString();
+    String id = sh.getString('achid').toString();
     String img = sh.getString('imgurl').toString();
-    String labid = sh.getString('labid').toString();
 
-    final urls = Uri.parse('$url/coc_edit_certificate_get/');
+    final urls = Uri.parse('$url/coc_edit_certificate/');
     try {
       final response = await http.post(urls, body: {
-        'lid':lid,
-        'labid':labid,
+        // 'lid':lid,
+        'id':id,
+        'photo':photo_,
+        'name':CertificateTypeController.text,
 
 
 
@@ -227,15 +255,17 @@ class _EditCertificateState extends State<EditCertificate> {
       if (response.statusCode == 200) {
         String status = jsonDecode(response.body)['status'];
         if (status=='ok') {
-          String certificate_type=jsonDecode(response.body)['certificate_type'].toString();
-          String photo=img+jsonDecode(response.body)['photo'].toString();
+          // String name=jsonDecode(response.body)['name'].toString();
+          // String photo=img+jsonDecode(response.body)['photo'].toString();
+          //
 
-
-          setState(() {
-
-            CertificateTypeController.text= certificate_type;
-            lphoto= photo;
-          });
+          // setState(() {
+          //
+          //   CertificateTypeController.text= name;
+          //   lphoto= photo;
+          // });
+          Fluttertoast.showToast(msg: 'Edited successfully');
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewCertificatePage(title: "title")));
 
 
 
